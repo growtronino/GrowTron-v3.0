@@ -114,3 +114,36 @@ O Growtron automatiza todas essas tarefas, permitindo monitoramento e controle r
 | Fonte de Alimentação | 1 | 5V 3A (mínimo) |
 
 ### 📌 Diagrama de Conexões
+
+ESP32 DevKit V1
+│
+├── I2C (Display OLED 0x3C)
+│ ├── GPIO 21 ──────► SDA
+│ └── GPIO 22 ──────► SCL
+│
+├── Sensor DHT
+│ └── GPIO 4 ───────► DATA
+│
+├── Sensores de Solo (ADC1)
+│ ├── GPIO 36 ──────► Vaso 1 (VP)
+│ ├── GPIO 39 ──────► Vaso 2 (VN)
+│ ├── GPIO 34 ──────► Vaso 3
+│ └── GPIO 35 ──────► Vaso 4
+│
+├── Sensor de Luminosidade
+│ └── GPIO 32 ──────► LDR (ADC)
+│
+├── Relés de Iluminação
+│ ├── GPIO 23 ──────► Grow A - Luz Normal
+│ ├── GPIO 5 ──────► Grow A - Luz Emerson
+│ ├── GPIO 18 ──────► Grow B - Luz Normal
+│ └── GPIO 19 ──────► Grow B - Luz Emerson
+│
+├── Relés de Irrigação
+│ ├── GPIO 25 ──────► Bomba Vaso 1
+│ ├── GPIO 26 ──────► Bomba Vaso 2
+│ ├── GPIO 27 ──────► Bomba Vaso 3
+│ └── GPIO 14 ──────► Bomba Vaso 4
+│
+└── Botão Reset Fábrica
+└── GPIO 0 ───────► BOOT (segurar 5s)
