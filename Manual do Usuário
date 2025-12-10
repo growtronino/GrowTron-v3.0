@@ -1,1 +1,894 @@
+# Manual do Usuário - Growtron v3.0
+## Sistema Inteligente de Automação de Cultivo
+
+---
+
+<div align="center">
+
+# 🌱 GROWTRON
+
+### Seu Assistente de Cultivo Indoor
+
+**Manual do Usuário e Guia de Configuração**
+
+*Versão 3.0 | Última atualização: Janeiro 2025*
+
+</div>
+
+---
+## 📋 Checklist de Configuração Rápida
+
+Use este checklist para garantir que tudo está configurado:
+
+### Configuração Inicial
+- [ ] Sistema ligado e tela OLED funcionando
+- [ ] Conectado ao GrowtronAP
+- [ ] Rede WiFi de casa configurada
+- [ ] Acesso ao Dashboard pelo navegador
+- [ ] Senha alterada (recomendado)
+
+### Irrigação
+- [ ] Sensores de solo instalados nos vasos
+- [ ] Calibração feita para cada sensor
+- [ ] Limites de umidade definidos
+- [ ] Horários de rega configurados
+- [ ] Teste manual de rega realizado
+
+### Iluminação
+- [ ] Relés de luz conectados
+- [ ] Horário de ligar/desligar definido
+- [ ] Efeito Emerson configurado (se usar)
+
+### Extras (Opcional)
+- [ ] Câmera configurada e funcionando
+- [ ] ThingSpeak ativado e testado
+
+---
+
+*Guarde este manual em local seguro para consultas futuras!*
+
+
+## 📖 Índice
+
+1. [Bem-vindo ao Growtron](#1-bem-vindo-ao-growtron)
+2. [O que vem na caixa](#2-o-que-vem-na-caixa)
+3. [Primeiros Passos - Configuração Inicial](#3-primeiros-passos---configuração-inicial)
+4. [Conhecendo o Painel de Controle](#4-conhecendo-o-painel-de-controle)
+5. [Guia de Funcionalidades](#5-guia-de-funcionalidades)
+6. [Dicas de Uso](#6-dicas-de-uso)
+7. [Resolução de Problemas (FAQ)](#7-resolução-de-problemas-faq)
+8. [Glossário de Termos](#8-glossário-de-termos)
+9. [Suporte e Contato](#9-suporte-e-contato)
+
+---
+
+# 1. Bem-vindo ao Growtron
+
+## 🎉 Parabéns pela sua escolha!
+
+Você acaba de adquirir o **Growtron**, um sistema inteligente que vai cuidar das suas plantas mesmo quando você não estiver por perto. Imagine poder viajar tranquilamente sabendo que suas plantas estão sendo regadas na hora certa, recebendo a quantidade ideal de luz e em um ambiente com temperatura controlada.
+
+### O que o Growtron faz por você:
+
+| Funcionalidade | O que significa na prática |
+|----------------|---------------------------|
+| **💧 Rega Automática** | Suas plantas são regadas nos horários que você definir, ou quando o solo estiver seco demais |
+| **💡 Controle de Luz** | As luzes ligam e desligam sozinhas no horário programado, simulando o ciclo natural do dia |
+| **🌡️ Monitoramento** | Você acompanha temperatura, umidade e condições do solo pelo celular ou computador |
+| **📱 Acesso Remoto** | Controle tudo de qualquer lugar, basta ter internet |
+| **📊 Histórico na Nuvem** | Seus dados ficam salvos online para você analisar depois |
+
+### Para quem é este manual?
+
+Este manual foi escrito pensando em você que quer aproveitar ao máximo o Growtron, mesmo sem conhecimentos técnicos. Vamos explicar tudo passo a passo, com calma e clareza.
+
+> 💡 **Dica:** Mantenha este manual por perto nas primeiras semanas. Depois que pegar o jeito, tudo ficará natural!
+
+---
+
+# 2. O que vem na caixa
+
+Antes de começar, vamos conferir se você tem todos os componentes necessários:
+
+## ✅ Lista de Verificação
+
+### Componentes Principais
+
+- [ ] **1x Placa controladora** (ESP32) - O "cérebro" do sistema
+- [ ] **1x Tela pequena** (Display OLED) - Mostra informações básicas
+- [ ] **1x Sensor de temperatura e umidade** (DHT) - Mede o clima do ambiente
+- [ ] **4x Sensores de solo** - Um para cada vaso, mede a umidade da terra
+- [ ] **1x Sensor de luz** (LDR) - Mede a luminosidade do ambiente
+- [ ] **8x Módulos de relé** - Ligam/desligam as bombas e luzes
+- [ ] **1x Cabo USB** - Para alimentação e primeira configuração
+- [ ] **1x Fonte de alimentação** - 5V (como carregador de celular potente)
+
+### Você vai precisar providenciar:
+
+- [ ] **4x Bombas d'água ou válvulas** - Para irrigação
+- [ ] **Luzes de cultivo** - LEDs ou lâmpadas próprias para plantas
+- [ ] **Mangueiras e conexões** - Para o sistema de água
+- [ ] **Rede WiFi** - Com acesso à internet
+
+[INSERIR IMAGEM: FOTO DE TODOS OS COMPONENTES ORGANIZADOS]
+
+---
+
+# 3. Primeiros Passos - Configuração Inicial
+
+## 🚀 Vamos colocar o Growtron para funcionar!
+
+A configuração inicial leva cerca de **15-20 minutos**. Siga cada passo com calma.
+
+---
+
+### Passo 1: Montagem Física
+
+**O que fazer:** Conectar os sensores e relés nos lugares certos.
+
+> ⚠️ **Importante:** Faça todas as conexões com o sistema **desligado** (cabo USB desconectado).
+
+**Conexões principais:**
+
+| Componente | Onde conectar |
+|------------|---------------|
+| Tela OLED | Pinos SDA e SCL (21 e 22) |
+| Sensor de temperatura | Pino 4 |
+| Sensor de solo - Vaso 1 | Pino 36 |
+| Sensor de solo - Vaso 2 | Pino 39 |
+| Sensor de solo - Vaso 3 | Pino 34 |
+| Sensor de solo - Vaso 4 | Pino 35 |
+| Sensor de luz | Pino 32 |
+
+[INSERIR IMAGEM: DIAGRAMA COLORIDO DE CONEXÕES]
+
+**Dica prática:** Use fitas coloridas ou etiquetas para identificar cada cabo. Isso facilita muito a manutenção futura!
+
+---
+
+### Passo 2: Primeira Ligação
+
+**O que fazer:** Ligar o sistema pela primeira vez.
+
+1. Conecte o cabo USB na placa ESP32
+2. Conecte a outra ponta em uma fonte de energia (tomada USB ou carregador)
+3. Aguarde alguns segundos
+
+**O que você vai ver:**
+
+A telinha OLED vai mostrar:
+```
+GROWTRON v3.0
+Iniciando...
+```
+
+Depois de alguns segundos:
+```
+GROWTRON v3.0
+WiFi: AP
+IP: 192.168.4.1
+```
+
+[INSERIR IMAGEM: FOTO DO DISPLAY OLED MOSTRANDO ESSAS MENSAGENS]
+
+> ✅ **Sucesso!** Se você viu essas mensagens, o sistema está funcionando. Vamos para o próximo passo!
+
+---
+
+### Passo 3: Conectar ao WiFi do Growtron
+
+**O que fazer:** Usar seu celular ou computador para se conectar ao Growtron.
+
+**No seu celular ou computador:**
+
+1. Abra as configurações de WiFi
+2. Procure uma rede chamada **`GrowtronAP`**
+3. Conecte-se usando a senha: **`growtron123`**
+
+[INSERIR IMAGEM: PRINT DA TELA DE WIFI DO CELULAR MOSTRANDO A REDE GROWTRONAP]
+
+> 📝 **Anotação importante:**
+> - Nome da rede: `GrowtronAP`
+> - Senha: `growtron123`
+
+---
+
+### Passo 4: Configurar sua Rede WiFi de Casa
+
+**O que fazer:** Ensinar o Growtron a se conectar na sua internet de casa.
+
+1. Com o celular conectado na rede `GrowtronAP`, abra o navegador de internet
+2. Digite na barra de endereços: **`192.168.4.1`**
+3. Uma página vai aparecer pedindo para escolher sua rede WiFi
+
+[INSERIR IMAGEM: PRINT DA PÁGINA DE CONFIGURAÇÃO DE WIFI]
+
+4. **Selecione sua rede WiFi** na lista
+5. **Digite a senha** da sua rede WiFi de casa
+6. Clique em **"Conectar"**
+
+**O que acontece depois:**
+
+- O Growtron vai reiniciar automaticamente
+- Ele vai se conectar à sua rede WiFi de casa
+- A telinha OLED vai mostrar o novo endereço IP
+
+**Exemplo do que você verá na tela:**
+```
+GROWTRON v3.0
+WiFi: ON
+IP: 192.168.0.105
+```
+
+> 📝 **Anote este número!** O IP (exemplo: 192.168.0.105) é o endereço que você vai usar para acessar o painel de controle. No seu caso, pode ser um número diferente.
+
+---
+
+### Passo 5: Acessar o Painel de Controle
+
+**O que fazer:** Entrar no sistema pela primeira vez.
+
+1. **Reconecte seu celular** à sua rede WiFi de casa (a normal, não o GrowtronAP)
+2. Abra o navegador de internet
+3. Digite o IP que apareceu na telinha (exemplo: `192.168.0.105`)
+4. Você verá a **tela de login**
+
+[INSERIR IMAGEM: PRINT DA TELA DE LOGIN]
+
+**Para entrar:**
+
+| Campo | O que digitar |
+|-------|---------------|
+| Usuário | `admin` |
+| Senha | `1234` |
+
+5. Clique em **"Entrar"**
+
+> ⚠️ **Segurança:** Recomendamos trocar a senha padrão assim que possível. Veja como fazer isso na seção de Configurações.
+
+---
+
+### 🎊 Parabéns! Configuração inicial concluída!
+
+Você agora tem acesso ao painel de controle do Growtron. Nos próximos capítulos, vamos aprender a usar cada funcionalidade.
+
+---
+
+# 4. Conhecendo o Painel de Controle
+
+## 🖥️ Sua Central de Comando
+
+O painel de controle é onde você monitora e configura tudo. Vamos conhecer cada parte.
+
+### Menu Principal
+
+Na parte de cima da tela, você encontra o menu com 5 opções:
+
+| Botão | Para que serve |
+|-------|----------------|
+| **Dashboard** | Tela principal com todas as informações |
+| **Configurações** | Ajustar horários, sensores, etc. |
+| **Logs** | Ver histórico de eventos |
+| **Ajuda** | Informações úteis e status do sistema |
+| **Sair** | Encerrar sua sessão (logout) |
+
+[INSERIR IMAGEM: PRINT DO MENU PRINCIPAL DESTACANDO CADA BOTÃO]
+
+---
+
+### Visão Geral do Dashboard
+
+O Dashboard é sua tela principal. Aqui você vê tudo de uma vez:
+
+[INSERIR IMAGEM: PRINT COMPLETO DO DASHBOARD]
+
+#### Seção 1: Ambiente 🌡️
+
+Mostra as condições do ambiente onde estão suas plantas:
+
+- **Hora atual** - Sincronizada automaticamente pela internet
+- **Temperatura** - Em graus Celsius (°C)
+- **Umidade do ar** - Em porcentagem (%)
+- **Luminosidade** - Quanto de luz está chegando no sensor
+
+[INSERIR IMAGEM: PRINT DESTACANDO A SEÇÃO AMBIENTE]
+
+#### Seção 2: Iluminação 💡
+
+Mostra o status das luzes de cada área de cultivo (Grow):
+
+- **Normal** - A luz principal do cultivo
+- **Emerson** - Luz especial que ajuda na fotossíntese (explicamos mais adiante)
+- **ON** (verde) - Luz ligada
+- **OFF** (vermelho) - Luz desligada
+
+[INSERIR IMAGEM: PRINT DESTACANDO A SEÇÃO ILUMINAÇÃO]
+
+#### Seção 3: Vasos 🌱
+
+O coração do sistema! Aqui você vê cada vaso individualmente:
+
+Para cada vaso, você verá:
+- **Nome do vaso** - Personalizável por você
+- **Umidade do solo** - Em porcentagem (a barra colorida ajuda a visualizar)
+- **Status da bomba** - Se está regando ou parada
+- **Botão de ação** - "Regar Agora" ou "Parar Rega"
+
+[INSERIR IMAGEM: PRINT DE UM CARD DE VASO]
+
+#### Seção 4: Câmera 📷 (Opcional)
+
+Se você configurou uma câmera, a imagem aparece aqui. Você pode ver suas plantas em tempo real!
+
+[INSERIR IMAGEM: PRINT DA SEÇÃO DA CÂMERA]
+
+---
+
+# 5. Guia de Funcionalidades
+
+## 💧 5.1 Configurando a Irrigação
+
+A irrigação é a função mais importante do Growtron. Vamos configurar passo a passo.
+
+### Acessando as Configurações de Irrigação
+
+1. Clique em **"Configurações"** no menu
+2. Role a página até encontrar a seção do vaso desejado (Vaso 1, Vaso 2, etc.)
+
+[INSERIR IMAGEM: PRINT DA SEÇÃO DE CONFIGURAÇÃO DE UM VASO]
+
+### Explicando cada campo:
+
+#### Informações Básicas
+
+| Campo | O que significa | Exemplo |
+|-------|-----------------|---------|
+| **Ativo** | Se este vaso está em uso | ✓ marcado = sim |
+| **Nome** | Um nome para identificar | "Tomates - Janela" |
+| **Partição** | A qual área de luz pertence | Grow A ou Grow B |
+
+#### Limites de Umidade
+
+Pense assim: o Growtron rega quando o solo está **seco demais** e para quando está **úmido o suficiente**.
+
+| Campo | O que significa | Valor sugerido |
+|-------|-----------------|----------------|
+| **Limite Baixo** | "Solo muito seco, precisa regar!" | 30% |
+| **Limite Alto** | "Solo úmido o suficiente" | 70% |
+
+> 💡 **Dica:** Plantas diferentes precisam de umidades diferentes. Pesquise sobre sua planta específica!
+
+#### Horários de Rega
+
+| Campo | O que significa | Exemplo |
+|-------|-----------------|---------|
+| **Rega Automática** | Ligar/desligar rega por horário | ✓ marcado |
+| **Horário 1** | Primeiro horário de rega do dia | 08:00 |
+| **Usar Horário 2** | Quer regar duas vezes ao dia? | ✓ marcado |
+| **Horário 2** | Segundo horário (opcional) | 18:00 |
+
+#### Modo de Rega
+
+Você pode escolher entre dois modos:
+
+**Modo Contínuo** (padrão):
+- A bomba liga, rega por X segundos, e desliga
+- Mais simples e direto
+- Bom para: vasos pequenos, solos que drenam bem
+
+| Campo | O que significa | Valor sugerido |
+|-------|-----------------|----------------|
+| **Tempo Contínuo** | Quantos segundos rega | 30 segundos |
+
+**Modo Pulsativo**:
+- A bomba liga e desliga várias vezes em pulsos
+- Dá tempo para a água penetrar no solo
+- Bom para: vasos grandes, solos compactados
+
+| Campo | O que significa | Valor sugerido |
+|-------|-----------------|----------------|
+| **Pulsos** | Quantas vezes liga/desliga | 3 |
+| **Tempo On** | Segundos ligada em cada pulso | 5 |
+| **Tempo Off** | Segundos de pausa entre pulsos | 10 |
+
+[INSERIR IMAGEM: DIAGRAMA EXPLICANDO REGA CONTÍNUA VS PULSATIVA]
+
+---
+
+### Calibrando os Sensores de Solo
+
+**Por que calibrar?**
+
+Cada sensor pode ter pequenas diferenças. A calibração garante que a leitura de "50% de umidade" seja precisa para o SEU sensor e SEU solo.
+
+**Como calibrar:**
+
+#### Passo 1: Calibrar o "Seco"
+1. Deixe o sensor **fora da terra** (no ar) ou em **solo completamente seco**
+2. Vá em Configurações
+3. Anote o número que aparece em "Atual" para aquele vaso
+4. Coloque esse número no campo **"ADC Solo Seco"**
+
+#### Passo 2: Calibrar o "Molhado"
+1. Coloque o sensor em **solo bem molhado** (ou em um copo com água)
+2. Anote o número que aparece em "Atual"
+3. Coloque esse número no campo **"ADC Solo Molhado"**
+
+#### Passo 3: Salvar
+1. Clique em **"Salvar Configurações"** no final da página
+
+[INSERIR IMAGEM: PRINT MOSTRANDO OS CAMPOS DE CALIBRAÇÃO]
+
+> 📝 **Valores típicos:**
+> - Solo seco: entre 3000 e 4000
+> - Solo molhado: entre 1000 e 2000
+> 
+> (Pode variar dependendo do seu sensor e tipo de solo)
+
+---
+
+## 💡 5.2 Configurando a Iluminação
+
+### O que é Fotoperíodo?
+
+Fotoperíodo é o "horário de funcionamento" da luz. Assim como o sol nasce e se põe, suas luzes de cultivo precisam de um ciclo regular.
+
+**Exemplos comuns:**
+
+| Fase da planta | Luz ligada | Luz desligada |
+|----------------|------------|---------------|
+| Vegetação (crescimento) | 18 horas | 6 horas |
+| Floração | 12 horas | 12 horas |
+| Mudas/Clones | 20 horas | 4 horas |
+
+### O que é Efeito Emerson?
+
+O Efeito Emerson é uma técnica avançada que usa luz **far-red** (vermelho distante) para potencializar a fotossíntese das plantas.
+
+**Como funciona no Growtron:**
+
+- A luz **Emerson** liga alguns minutos **ANTES** da luz normal
+- E desliga alguns minutos **DEPOIS** da luz normal
+- Isso "acorda" e "adormece" a planta de forma mais suave e eficiente
+
+[INSERIR IMAGEM: DIAGRAMA DO EFEITO EMERSON]
+
+**Exemplo:**
+- Deslocamento Emerson: 15 minutos
+- Luz normal liga: 06:00
+- Luz Emerson liga: 05:45 (15 min antes)
+- Luz normal desliga: 22:00
+- Luz Emerson desliga: 22:15 (15 min depois)
+
+### Configurando a Iluminação
+
+1. Clique em **"Configurações"**
+2. Encontre a seção **"Iluminação - Grow A"** (ou B)
+
+[INSERIR IMAGEM: PRINT DA SEÇÃO DE ILUMINAÇÃO]
+
+| Campo | O que significa | Exemplo |
+|-------|-----------------|---------|
+| **Hora Ligar** | Quando a luz principal liga | 06:00 |
+| **Hora Desligar** | Quando a luz principal desliga | 22:00 |
+| **Deslocamento Emerson** | Quantos minutos antes/depois | 15 |
+
+3. Clique em **"Salvar Configurações"**
+
+> 💡 **Dica:** Se você não usa luz Emerson, deixe o deslocamento em 0. A luz Emerson simplesmente não será acionada.
+
+---
+
+## 📷 5.3 Configurando a Câmera (Opcional)
+
+Se você tem uma câmera ESP32-CAM, pode integrá-la ao Growtron para ver suas plantas ao vivo.
+
+### Configuração
+
+1. Vá em **"Configurações"**
+2. Encontre a seção **"Câmera"**
+
+[INSERIR IMAGEM: PRINT DA SEÇÃO CÂMERA]
+
+| Campo | O que colocar |
+|-------|---------------|
+| **IP da Câmera** | O endereço IP da sua câmera (ex: 192.168.0.120) |
+| **Token da Câmera** | A senha de acesso da câmera (se configurada) |
+
+3. Clique em **"Salvar Configurações"**
+4. Volte ao Dashboard - a imagem da câmera deve aparecer!
+
+---
+
+## ☁️ 5.4 Salvando Dados na Nuvem (ThingSpeak)
+
+O ThingSpeak é um serviço gratuito que guarda os dados do seu cultivo online. Você pode ver gráficos de temperatura, umidade e muito mais ao longo do tempo.
+
+### Por que usar?
+
+- **Histórico:** Veja como estavam as condições há uma semana
+- **Gráficos:** Visualize tendências de temperatura e umidade
+- **Acesso em qualquer lugar:** Dados ficam na internet
+
+### Configurando o ThingSpeak
+
+#### Passo 1: Criar conta no ThingSpeak
+1. Acesse [thingspeak.com](https://thingspeak.com)
+2. Clique em **"Get Started For Free"**
+3. Crie sua conta (é grátis!)
+
+[INSERIR IMAGEM: PRINT DA PÁGINA INICIAL DO THINGSPEAK]
+
+#### Passo 2: Criar um Canal
+1. Após login, clique em **"New Channel"**
+2. Dê um nome (ex: "Meu Growtron")
+3. Marque os campos Field 1 até Field 8
+4. Clique em **"Save Channel"**
+
+#### Passo 3: Copiar a Chave de API
+1. Na página do seu canal, clique na aba **"API Keys"**
+2. Copie o código em **"Write API Key"**
+
+[INSERIR IMAGEM: PRINT DA PÁGINA API KEYS DO THINGSPEAK]
+
+#### Passo 4: Configurar no Growtron
+1. Vá em **"Configurações"**
+2. Encontre a seção **"ThingSpeak"**
+3. Marque **"Ativar ThingSpeak"**
+4. Cole a chave no campo **"Write API Key"**
+5. Clique em **"Salvar Configurações"**
+
+[INSERIR IMAGEM: PRINT DA SEÇÃO THINGSPEAK NAS CONFIGURAÇÕES]
+
+#### Passo 5: Testar
+1. Vá em **"Ajuda"**
+2. Clique no botão **"Testar API Key"**
+3. Se aparecer "Sucesso", está funcionando!
+
+---
+
+## 🔐 5.5 Alterando a Senha
+
+Por segurança, recomendamos trocar a senha padrão.
+
+1. Vá em **"Configurações"**
+2. Encontre o campo **"Nova Senha"**
+3. Digite sua nova senha
+4. Clique em **"Salvar Configurações"**
+
+> ⚠️ **Importante:** Anote a nova senha em lugar seguro! Se esquecê-la, precisará fazer reset de fábrica.
+
+---
+
+## 🔄 5.6 Atualizando o Sistema (OTA)
+
+OTA significa "Over-The-Air" - você pode atualizar o sistema sem precisar de cabos!
+
+### Quando atualizar?
+
+Quando uma nova versão do Growtron for lançada com:
+- Correções de problemas
+- Novas funcionalidades
+- Melhorias de desempenho
+
+### Como atualizar
+
+1. Baixe o arquivo de atualização (arquivo `.bin`)
+2. Vá em **"Configurações"** → **"Atualização OTA"** (ou acesse `/update`)
+3. Clique em **"Escolher arquivo"**
+4. Selecione o arquivo `.bin` baixado
+5. Clique em **"Enviar Atualização"**
+6. **Aguarde!** O processo leva cerca de 1-2 minutos
+7. O sistema reiniciará automaticamente
+
+[INSERIR IMAGEM: PRINT DA PÁGINA DE ATUALIZAÇÃO OTA]
+
+> ⚠️ **Atenção:** Não desligue o sistema durante a atualização!
+
+---
+
+# 6. Dicas de Uso
+
+## 🌟 Truques para Aproveitar ao Máximo
+
+### Dica 1: Acesse pelo QR Code
+
+Na página de **"Ajuda"**, você encontra um QR Code. Escaneie com o celular para acessar o painel rapidamente, sem precisar lembrar do IP!
+
+[INSERIR IMAGEM: PRINT DO QR CODE NA PÁGINA DE AJUDA]
+
+---
+
+### Dica 2: Comece com Configurações Conservadoras
+
+Quando estiver começando:
+
+| Configuração | Valor conservador | Por quê |
+|--------------|-------------------|---------|
+| Tempo de rega | 15-20 segundos | Evita encharcar |
+| Limite baixo umidade | 35-40% | Rega antes de secar demais |
+| Rega automática | 1x por dia | Observe antes de aumentar |
+
+Depois de algumas semanas observando, ajuste conforme necessário.
+
+---
+
+### Dica 3: Monitore os Logs
+
+Os logs são seu "diário de bordo". Eles registram:
+- Quando cada rega aconteceu
+- Alterações de configuração
+- Possíveis erros
+
+Verifique periodicamente em **"Logs"** para entender o comportamento do sistema.
+
+[INSERIR IMAGEM: PRINT DA PÁGINA DE LOGS]
+
+---
+
+### Dica 4: Calibre os Sensores a Cada Troca de Solo
+
+Tipos diferentes de solo retêm água de forma diferente. Sempre que trocar o substrato, recalibre os sensores.
+
+---
+
+### Dica 5: Use Nomes Descritivos
+
+Em vez de "Vaso 1", use nomes como:
+- "Tomate Cereja - Varanda"
+- "Manjericão - Cozinha"
+- "Flores - Quarto"
+
+Isso facilita identificar cada planta no Dashboard!
+
+---
+
+### Dica 6: Verifique a Telinha OLED
+
+A telinha do ESP32 mostra informações básicas mesmo sem computador:
+
+| Tela | O que mostra |
+|------|--------------|
+| 1 | Versão + Status WiFi + IP |
+| 2 | Status das bombas |
+| 3 | Status das luzes |
+| 4 | Hora + Temperatura + Umidade |
+| 5 | Umidade do Vaso 1 |
+| 6 | Umidade dos Vasos 2, 3 e 4 |
+
+As telas alternam automaticamente a cada 2 segundos.
+
+---
+
+### Dica 7: Marque o Horário de Verão
+
+O Growtron usa horário automático da internet (servidor brasileiro). Se houver mudança de horário de verão, o sistema ajusta sozinho!
+
+---
+
+# 7. Resolução de Problemas (FAQ)
+
+## ❓ Perguntas Frequentes
+
+---
+
+### Problema 1: "Não consigo encontrar a rede GrowtronAP"
+
+**Possíveis causas e soluções:**
+
+| Causa | Solução |
+|-------|---------|
+| O ESP32 já está conectado a uma rede | Se já configurou antes, ele conecta direto na sua rede WiFi. Verifique a telinha OLED para ver o IP. |
+| O sistema não ligou | Verifique se o cabo USB está bem conectado e se a fonte está funcionando. |
+| Celular muito longe | Aproxime-se do ESP32. O alcance do WiFi dele é de poucos metros. |
+
+**Se nada funcionar - Reset de Fábrica:**
+
+1. Com o sistema ligado, localize o botão pequeno marcado "BOOT" na placa
+2. Pressione e segure por **5 segundos**
+3. A telinha mostrará "FACTORY RESET"
+4. O sistema reiniciará e a rede GrowtronAP voltará a aparecer
+
+---
+
+### Problema 2: "A umidade do solo está mostrando 0% ou 100% sempre"
+
+**Causa:** O sensor não está calibrado corretamente.
+
+**Solução:**
+
+1. Vá em **Configurações**
+2. Encontre o vaso com problema
+3. Verifique os valores de **"ADC Solo Seco"** e **"ADC Solo Molhado"**
+4. Eles devem ser **diferentes** um do outro
+5. Siga o processo de calibração explicado na seção 5.1
+
+**Valores de referência:**
+
+| Situação | Valor ADC típico |
+|----------|------------------|
+| Sensor no ar (seco) | 3000-4000 |
+| Sensor na água (molhado) | 1000-2000 |
+
+> ⚠️ **Atenção:** Se o valor de "Seco" for MENOR que "Molhado", inverta os valores!
+
+---
+
+### Problema 3: "As luzes não estão ligando no horário programado"
+
+**Possíveis causas e soluções:**
+
+| Causa | Solução |
+|-------|---------|
+| Horário do sistema errado | Verifique a hora na telinha OLED ou no Dashboard. Se estiver errada, verifique sua conexão com internet. |
+| Configuração não foi salva | Depois de alterar horários, clique em "Salvar Configurações" |
+| Horário cruza meia-noite | O sistema suporta isso! Verifique se digitou corretamente (ex: liga 18:00, desliga 06:00) |
+| Grow desativado | Verifique se o número de partições está correto (1 ou 2) |
+
+**Para verificar a hora:**
+
+A hora aparece no Dashboard e na telinha OLED. Se estiver errada:
+1. Verifique se o WiFi está conectado
+2. Aguarde até 1 minuto - o sistema sincroniza automaticamente
+3. Se persistir, reinicie o sistema
+
+---
+
+### Problema 4: "O ThingSpeak não está recebendo dados"
+
+**Como diagnosticar:**
+
+1. Vá em **"Ajuda"**
+2. Verifique a seção "Status ThingSpeak"
+3. Se mostrar "Erro", veja a mensagem
+
+**Causas comuns:**
+
+| Mensagem | Causa | Solução |
+|----------|-------|---------|
+| "WiFi desconectado" | Sem internet | Verifique sua conexão WiFi |
+| "Erro HTTP 401" | Chave errada | Verifique a API Key digitada |
+| "Erro HTTP 0" | Servidor inacessível | Aguarde e tente mais tarde |
+
+**Teste a conexão:**
+
+1. Clique no botão **"Testar API Key"** na página de Ajuda
+2. Aguarde alguns segundos
+3. Verifique se aparece "Sucesso"
+
+> 📝 **Lembrete:** O ThingSpeak gratuito aceita dados a cada 15 segundos. O Growtron envia a cada 60 segundos, então está dentro do limite.
+
+---
+
+### Problema 5: "Esqueci a senha do painel"
+
+**Solução: Reset de Fábrica**
+
+1. Pressione e segure o botão **BOOT** na placa por **5 segundos**
+2. O sistema será resetado para as configurações originais
+3. A senha voltará a ser `1234`
+
+> ⚠️ **Atenção:** O reset apaga TODAS as configurações, não apenas a senha. Você precisará configurar WiFi e todo o resto novamente.
+
+---
+
+### Problema 6: "A bomba não está regando"
+
+**Verificações:**
+
+| O que verificar | Como verificar |
+|-----------------|----------------|
+| A bomba funciona? | Teste conectando direto em uma fonte 5V |
+| O relé está ligando? | Você deve ouvir um "click" e ver um LED no módulo de relé |
+| As conexões estão firmes? | Verifique os fios |
+| O vaso está ativo? | Em Configurações, o checkbox "Ativo" deve estar marcado |
+| A rega automática está ativada? | Verifique o checkbox "Rega Automática" |
+
+**Teste manual:**
+
+1. Vá ao Dashboard
+2. No card do vaso, clique em **"Regar Agora"**
+3. A bomba deveria ligar imediatamente
+4. Se ligar, o problema é na configuração de horários
+5. Se não ligar, o problema é no hardware ou conexões
+
+---
+
+### Problema 7: "A tela OLED está em branco"
+
+**Verificações:**
+
+1. **Conexões:** Verifique se SDA está no pino 21 e SCL no pino 22
+2. **Endereço:** A maioria dos displays usa endereço 0x3C. Alguns usam 0x3D. Isso requer alteração no código.
+3. **Alimentação:** O display precisa de 3.3V, não 5V
+
+**Teste rápido:**
+
+Se o sistema está funcionando (você consegue acessar pelo navegador), o problema é apenas no display, não no sistema inteiro.
+
+---
+
+# 8. Glossário de Termos
+
+| Termo | O que significa |
+|-------|-----------------|
+| **ADC** | "Conversor Analógico-Digital" - o número bruto que o sensor envia (ex: 2500) |
+| **API Key** | Uma "senha especial" usada para enviar dados para a internet |
+| **Dashboard** | Painel de controle - a tela principal do sistema |
+| **Efeito Emerson** | Técnica de iluminação que usa luz vermelha distante para melhorar a fotossíntese |
+| **ESP32** | O nome do chip/placa que controla o Growtron |
+| **Far-Red** | Luz vermelha com comprimento de onda acima de 700nm, usada no Efeito Emerson |
+| **Fotoperíodo** | O ciclo de luz e escuro que as plantas recebem em 24 horas |
+| **Grow** | Área de cultivo (o Growtron suporta até 2 grows independentes) |
+| **IP** | "Endereço de Internet" - o número que identifica o Growtron na sua rede (ex: 192.168.0.105) |
+| **LDR** | "Resistor Dependente de Luz" - sensor que mede luminosidade |
+| **NTP** | Sistema que mantém a hora do Growtron sempre certa pela internet |
+| **OLED** | Tipo de tela pequena usada para mostrar informações básicas |
+| **OTA** | "Over-The-Air" - atualização sem fio, sem precisar de cabos |
+| **Partição** | Divisão do sistema em áreas independentes (Grow A e Grow B) |
+| **Relé** | Componente que liga/desliga equipamentos elétricos (bombas, luzes) |
+| **Reset de Fábrica** | Voltar todas as configurações para o estado original |
+| **Sensor Capacitivo** | Tipo de sensor de umidade do solo que não sofre corrosão |
+| **ThingSpeak** | Serviço de nuvem gratuito para guardar e visualizar dados |
+| **WiFi AP** | "Access Point" - quando o Growtron cria sua própria rede WiFi |
+
+---
+
+# 9. Suporte e Contato
+
+## 🆘 Precisa de Ajuda?
+
+### Antes de Pedir Ajuda
+
+Por favor, verifique:
+
+1. ✅ Leu este manual por completo?
+2. ✅ Verificou a seção de Resolução de Problemas?
+3. ✅ Tentou reiniciar o sistema?
+4. ✅ As conexões dos cabos estão firmes?
+
+### Canais de Suporte
+
+| Canal | Para que usar | Link/Contato |
+|-------|---------------|--------------|
+| **GitHub Issues** | Reportar bugs ou sugerir melhorias | [github.com/seu-usuario/growtron/issues](https://github.com) |
+| **Comunidade Discord** | Conversar com outros usuários | [Link do Discord] |
+| **E-mail** | Dúvidas comerciais | suporte@growtron.com.br |
+
+### Ao Pedir Ajuda, Informe:
+
+1. **Versão do Growtron** (aparece na tela inicial e no Dashboard)
+2. **O que você tentou fazer**
+3. **O que aconteceu** (mensagem de erro, comportamento inesperado)
+4. **O que você já tentou** para resolver
+5. **Foto da telinha OLED** (se aplicável)
+6. **Print da tela do navegador** (se aplicável)
+
+---
+
+## 📚 Recursos Adicionais
+
+- **Vídeo de Instalação:** [Link do YouTube]
+- **Fórum da Comunidade:** [Link do Fórum]
+- **Wiki Completa:** [github.com/seu-usuario/growtron/wiki](https://github.com)
+
+---
+
+<div align="center">
+
+---
+
+## 🌱 Bom Cultivo!
+
+*Esperamos que o Growtron torne seu cultivo mais fácil e prazeroso.*
+
+*Se este projeto te ajudou, considere dar uma ⭐ no GitHub!*
+
+---
+
+**Growtron v3.0** | Feito com 💚 para cultivadores
+
+</div>
+
+---
 
