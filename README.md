@@ -1,96 +1,116 @@
-# GrowTron-v3.0
+<div align="center">
 
-Growtron 🌱 - Sistema de Automação de Cultivo Inteligente
-PlatformIO
-Framework
-License
-Status
+# 🌱 GROWTRON
 
-Growtron é um firmware avançado para ESP32 projetado para automação de precisão em ambientes de cultivo indoor (Grows). Ele oferece controle granular sobre iluminação (incluindo Efeito Emerson), irrigação baseada em umidade do solo, monitoramento ambiental e integração com IoT, tudo gerenciado através de um Dashboard Web responsivo hospedado no próprio microcontrolador.
+### Sistema Inteligente de Automação de Cultivo Indoor
 
-🎯 Visão Geral
-O projeto resolve a necessidade de controladores de cultivo acessíveis, porém robustos, eliminando a dependência de timers mecânicos e aferições manuais. O Growtron atua como um hub central que:
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+[![ESP32](https://img.shields.io/badge/ESP32-DevKit_V1-blue.svg)](https://www.espressif.com/)
+[![Arduino](https://img.shields.io/badge/Framework-Arduino-00979D.svg)](https://www.arduino.cc/)
+[![Version](https://img.shields.io/badge/Version-3.0-brightgreen.svg)]()
+[![Status](https://img.shields.io/badge/Status-Production_Ready-success.svg)]()
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 
-Gerencia fotoperíodos complexos.
-Automatiza a rega com base na necessidade real da planta (sensores capacitivos).
-Fornece telemetria remota via Web e Cloud.
-✨ Funcionalidades Principais
-Controle de Iluminação Dual-Zone: Suporte para 2 partições (Grows) independentes com controle de luz principal e auxiliar (Efeito Emerson/Far-Red) com offsets programáveis.
-Irrigação Inteligente: Controle para até 4 vasos com sensores capacitivos. Modos de rega contínua ou pulsativa (para melhor absorção do solo).
-Dashboard Web Responsivo: Interface moderna, escura e mobile-friendly (sem dependências externas de CSS/JS) para monitoramento e configuração em tempo real.
-Monitoramento Ambiental: Leitura de Temperatura, Umidade (DHT11/22) e Luminosidade (LDR).
-Conectividade & IoT:
-Integração nativa com ThingSpeak para datalogging na nuvem.
-Visualização de Câmeras IP (ESP32-CAM) diretamente no dashboard.
-Sincronização de horário NTP.
-Robustez: Sistema de arquivos LittleFS para logs persistentes, atualizações OTA (Over-The-Air) e modo AP de Fallback para configuração de WiFi.
-🛠️ Hardware e Arquitetura
-O sistema foi projetado para o ESP32 DevKit V1. Abaixo está o mapa de pinagem (Pinout) padrão definido no firmware.
+<p align="center">
+  <img src="docs/images/growtron-banner.png" alt="Growtron Banner" width="600">
+</p>
 
-Componente	Função	GPIO (ESP32)	Notas
-Sensores			
-DHT11 / DHT22	Temp/Umidade	GPIO 4	Configurável na Web
-LDR	Luminosidade	GPIO 32	Leitura Analógica
-Capacitivo V1	Solo Vaso 1	GPIO 36 (VP)	ADC1 Apenas
-Capacitivo V2	Solo Vaso 2	GPIO 39 (VN)	ADC1 Apenas
-Capacitivo V3	Solo Vaso 3	GPIO 34	ADC1 Apenas
-Capacitivo V4	Solo Vaso 4	GPIO 35	ADC1 Apenas
-Atuadores			
-Relé Luz A	Grow A - Normal	GPIO 23	Lógica Invertida (Low=On)
-Relé Luz A (E)	Grow A - Emerson	GPIO 5	
-Relé Luz B	Grow B - Normal	GPIO 18	
-Relé Luz B (E)	Grow B - Emerson	GPIO 19	
-Relé Rega 1-4	Bombas	25, 26, 27, 14	
-Outros			
-OLED Display	I2C SDA/SCL	GPIO 21, 22	128x32 ou 128x64
-Botão Reset	Factory Reset	GPIO 0 (BOOT)	Segurar 5s para resetar
-🚀 Pré-requisitos
-Para compilar e enviar o projeto, você precisará de:
+**Controle total do seu cultivo indoor com irrigação inteligente, iluminação com Efeito Emerson e monitoramento em tempo real.**
 
-Hardware: ESP32, Módulo Relé 8 canais (ou 2x4), Display OLED SSD1306, Sensores.
-IDE: Recomenda-se VS Code com extensão PlatformIO (para fácil gerenciamento de libs e LittleFS). Alternativamente, Arduino IDE configurada para ESP32.
-Drivers: Drivers USB para Ponte CP210x ou CH340 (dependendo da sua placa).
-📦 Instalação e Execução
-1. Clonar o Repositório
-Bash
+[Funcionalidades](#-funcionalidades) •
+[Instalação](#-instalação) •
+[Hardware](#-hardware) •
+[Documentação](#-documentação) •
+[Contribuir](#-como-contribuir)
 
-git clone https://github.com/seu-usuario/growtron.git
-cd growtron
-2. Configurar Dependências
-As seguintes bibliotecas são obrigatórias (instalação via Library Manager):
+</div>
 
-ESPAsyncWebServer & AsyncTCP
-Adafruit SSD1306 & Adafruit GFX
-DHT sensor library
-NTPClient
-ArduinoJson
-3. Configuração da Partição (Crucial)
-Como o projeto utiliza LittleFS para logs e OTA para atualizações, você deve selecionar um esquema de partição adequado na IDE.
+---
 
-Arduino IDE: Tools > Partition Scheme > Huge APP (3MB No OTA/1MB SPIFFS) (ou similar).
-PlatformIO: Adicione board_build.partitions = huge_app.csv no platformio.ini.
-4. Upload
-Compile e faça o upload do código para o ESP32.
+## 📋 Sobre o Projeto
 
-Nota: Certifique-se de que a imagem do sistema de arquivos LittleFS foi formatada/inicializada corretamente na primeira execução (o código lida com isso automaticamente).
+O **Growtron** é um sistema embarcado completo de automação para cultivo indoor, desenvolvido para ESP32. Ele oferece controle preciso de irrigação, gerenciamento inteligente de iluminação com suporte ao **Efeito Emerson**, monitoramento ambiental em tempo real e integração com serviços de nuvem.
 
-⚙️ Configuração Inicial
-Ao iniciar pela primeira vez, o ESP32 criará um Ponto de Acesso (Hotspot).
-Conecte-se à rede WiFi: GrowtronAP | Senha: growtron123.
-Abra o navegador e acesse: http://192.168.4.1.
-Faça login com as credenciais padrão:
-Usuário: admin
-Senha: 1234
-Navegue até a aba Config (Cfg) e configure o SSID e Senha da sua rede WiFi local. O sistema reiniciará e se conectará à sua rede.
-🤝 Como Contribuir
-Contribuições são bem-vindas! Se você tiver ideias para melhorar a lógica de irrigação ou novas integrações:
+### 🎯 Problema que Resolve
 
-Faça um Fork do projeto.
-Crie uma Branch para sua Feature (git checkout -b feature/NovaFeature).
-Faça o Commit (git commit -m 'Adiciona suporte a sensor XYZ').
-Faça o Push (git push origin feature/NovaFeature).
-Abra um Pull Request.
-📄 Licença
-Este projeto está licenciado sob a Licença MIT - veja o arquivo LICENSE para detalhes.
+Cultivadores indoor enfrentam desafios constantes com:
+- **Irrigação inconsistente** — plantas recebendo água demais ou de menos
+- **Fotoperíodo impreciso** — luzes ligando/desligando em horários errados
+- **Falta de monitoramento** — não saber as condições reais do ambiente
+- **Ausência prolongada** — impossibilidade de viajar sem comprometer o cultivo
 
-<p align="center">Desenvolvido com ❤️ para a comunidade Maker e Cultivadores.</p>
+O Growtron automatiza todas essas tarefas, permitindo monitoramento e controle remoto via interface web responsiva.
+
+### ✨ Diferenciais
+
+| Característica | Benefício |
+|----------------|-----------|
+| **Efeito Emerson** | Maximiza a fotossíntese com LEDs far-red antes/depois do fotoperíodo |
+| **Rega Pulsativa** | Previne compactação do solo e encharcamento |
+| **Multi-Grow** | Suporta até 2 partições independentes com 4 vasos |
+| **Zero Dependências Cloud** | Funciona 100% offline, integração com nuvem é opcional |
+| **OTA Updates** | Atualize o firmware sem cabos |
+
+---
+
+## 🚀 Funcionalidades
+
+### 🌡️ Monitoramento Ambiental
+- Temperatura e umidade do ar (DHT11/DHT22)
+- Luminosidade ambiente (sensor LDR)
+- Umidade do solo por vaso (sensores capacitivos)
+- Sincronização de horário via NTP
+
+### 💧 Sistema de Irrigação
+- **4 zonas independentes** (uma bomba/válvula por vaso)
+- **Modo automático** com 2 horários programáveis por vaso
+- **Modo pulsativo** configurável (pulsos on/off)
+- **Modo contínuo** com tempo definido
+- **Limites de umidade** para rega inteligente
+- Calibração individual por sensor
+
+### 💡 Controle de Iluminação
+- **2 grows independentes** (Grow A e Grow B)
+- **4 canais de luz** (Normal + Emerson por grow)
+- **Efeito Emerson** com deslocamento configurável
+- Suporte a ciclos que cruzam meia-noite
+- Fotoperíodo totalmente personalizável
+
+### 🖥️ Interface Web
+- **Dashboard responsivo** com tema escuro moderno
+- **Sistema de login** com sessões seguras
+- **Configuração completa** via navegador
+- **Visualização de câmera IP** integrada
+- **Logs do sistema** persistentes
+- **Página de ajuda** detalhada
+
+### ☁️ Integrações
+- **ThingSpeak** — envio de dados para nuvem (8 campos)
+- **Câmera ESP32-CAM** — streaming de imagem no dashboard
+- **OTA Updates** — atualização de firmware via web
+- **API REST** — endpoints JSON para automação externa
+
+### 📟 Display OLED
+- Ciclo automático de 6 telas informativas
+- Status de WiFi, IP, bombas, luzes
+- Leituras de sensores em tempo real
+- Hora NTP sincronizada
+
+---
+
+## 🔧 Hardware
+
+### Componentes Necessários
+
+| Componente | Quantidade | Especificação |
+|------------|------------|---------------|
+| ESP32 DevKit V1 | 1 | Dual-core, 4MB Flash |
+| Display OLED | 1 | 0.91" ou 0.96" I2C 128x32 |
+| Sensor DHT | 1 | DHT11 ou DHT22 |
+| Sensor de Solo Capacitivo | 4 | Capacitive Soil Moisture v1.2 |
+| Sensor LDR | 1 | Módulo ou resistor divisor |
+| Módulo Relé | 8 | 5V, optoacoplado (4 luz + 4 rega) |
+| Bomba/Válvula | 4 | 5V ou 12V (conforme projeto) |
+| Fonte de Alimentação | 1 | 5V 3A (mínimo) |
+
+### 📌 Diagrama de Conexões
